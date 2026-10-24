@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h3 class="text-center fw-bold mb-4 text-primary"><i class="bi bi-shield-lock me-2"></i>系统登录</h3>
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label text-muted">用户名</label>
+            <input name="username" class="form-control" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label text-muted">密码</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2">登 录</button>
+        </form>
+        <div class="text-center mt-3">
+          <small class="text-muted">默认管理员：admin / admin123</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

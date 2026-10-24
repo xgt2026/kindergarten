@@ -1,0 +1,15 @@
+body { font-family: system-ui, "Microsoft YaHei", sans-serif; margin: 0; background: #f5f6f8; }
+.navbar { display: flex; gap: 16px; align-items: center; padding: 12px 24px; background: #2d6cdf; }
+.navbar a { color: #fff; text-decoration: none; }
+.navbar .spacer { flex: 1; }
+.container { max-width: 1000px; margin: 24px auto; background: #fff; padding: 24px; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+th, td { border-bottom: 1px solid #eee; padding: 8px; text-align: left; }
+th { background: #fafafa; }
+label { display: block; margin: 10px 0; }
+input, select { padding: 6px 8px; margin-left: 6px; }
+button, .btn { padding: 6px 12px; background: #2d6cdf; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
+button.danger { background: #d9534f; }
+.flash { background: #fff3cd; padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; }
+.inline { display: inline; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; }

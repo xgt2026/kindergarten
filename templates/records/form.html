@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>新增考勤/接送记录</h2>
+<form method="post">
+  <label>选择儿童
+    <select name="child_id" required>
+      <option value="">-- 请选择 --</option>
+      {% for c in children %}
+        <option value="{{ c.id }}">{{ c.name }}（{{ c.class_name or '未分班' }}）</option>
+      {% endfor %}
+    </select>
+  </label>
+  
+  <label>记录类型
+    <select name="record_type" required>
+      <option value="入园">入园（签到）</option>
+      <option value="离园">离园（签退）</option>
+    </select>
+  </label>
+  
+  <label>接送人/老师姓名
+    <input name="operator" placeholder="如：妈妈、王老师">
+  </label>
+  
+  <button type="submit">保存记录</button>
+  <a href="{{ url_for('records_list') }}">取消</a>
+</form>
+{% endblock %}

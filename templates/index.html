@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-secondary"><i class="bi bi-speedometer2 me-2"></i>仪表盘</h3>
+</div>
+
+{% if current_user.role in ['admin', 'teacher'] %}
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card text-white bg-primary h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title opacity-75">儿童总数</h5>
+            <h2 class="display-5 fw-bold mb-0">{{ child_count }}</h2>
+          </div>
+          <i class="bi bi-emoji-smile" style="font-size: 4rem; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-white bg-success h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title opacity-75">班级总数</h5>
+            <h2 class="display-5 fw-bold mb-0">{{ class_count }}</h2>
+          </div>
+          <i class="bi bi-people-fill" style="font-size: 4rem; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <!-- 家长端视图 -->
+  <div class="card mb-4 border-start border-4 border-primary">
+    <div class="card-body">
+      <h4 class="card-title fw-bold text-primary mb-3"><i class="bi bi-person-vcard me-2"></i>我的孩子信息</h4>
+      {% if child %}
+        <div class="row">
+          <div class="col-md-4 mb-2"><strong>姓名：</strong>{{ child.name }} （{{ child.gender }}）</div>
+          <div class="col-md-4 mb-2"><strong>班级：</strong><span class="badge bg-secondary">{{ child.class_name or '未分班' }}</span></div>
+          <div class="col-md-4 mb-2"><strong>过敏史：</strong><span class="text-danger">{{ child.allergy or '无' }}</span></div>
+        </div>
+      {% else %}
+        <p class="text-danger mb-0">您的账号尚未绑定孩子信息，请联系老师或管理员。</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if photos %}
+  <h4 class="fw-bold text-secondary mb-3"><i class="bi bi-image me-2"></i>最新成长记录</h4>
+  <div class="row g-4 mb-5">
+    {% for p in photos %}
+      <div class="col-md-3">
+        <div class="card h-100">
+          <img src="{{ url_for('static', filename=p.image_path) }}" class="card-img-top" style="height: 180px; object-fit: cover;">
+          <div class="card-body p-3">
+            <p class="card-text fw-medium mb-1">{{ p.description }}</p>
+            <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ p.created_at[:10] }}</small>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endif %}
+
+<div class="card mt-4">
+  <div class="card-header bg-white fw-bold"><i class="bi bi-megaphone-fill text-warning me-2"></i>最新通知</div>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+    {% for n in notices %}
+      <li class="list-group-item px-0">
+        <div class="d-flex w-100 justify-content-between">
+          <h6 class="mb-1 fw-bold text-dark">{{ n.title }}</h6>
+          <small class="text-muted">{{ n.created_at[:16] }}</small>
+        </div>
+        <p class="mb-1 text-secondary">{{ n.content }}</p>
+      </li>
+    {% else %}
+      <li class="list-group-item px-0 text-muted">暂无最新通知</li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

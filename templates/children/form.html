@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ "编辑儿童" if child else "添加儿童" }}</h2>
+<form method="post">
+  <label>姓名 <input name="name" required value="{{ child.name if child else '' }}"></label>
+  <label>性别
+    <select name="gender">
+      <option value="男" {% if child and child.gender == '男' %}selected{% endif %}>男</option>
+      <option value="女" {% if child and child.gender == '女' %}selected{% endif %}>女</option>
+    </select>
+  </label>
+  <label>生日 <input type="date" name="birthday" value="{{ child.birthday if child else '' }}"></label>
+  <label>班级
+    <select name="class_id">
+      <option value="">未分班</option>
+      {% for c in classes %}
+        <option value="{{ c.id }}" {% if child and child.class_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>监护人 <input name="guardian" value="{{ child.guardian if child else '' }}"></label>
+  <label>电话 <input name="phone" value="{{ child.phone if child else '' }}"></label>
+  <label>过敏史 <input name="allergy" value="{{ child.allergy if child else '' }}"></label>
+  <button type="submit">保存</button>
+  <a href="{{ url_for('children_list') }}">取消</a>
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>我的请假</h2>
+
+<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+  <h3 style="margin-top:0;">提交新请假</h3>
+  <form method="post">
+    <label>开始日期 <input type="date" name="start_date" required></label>
+    <label>结束日期 <input type="date" name="end_date" required></label>
+    <label>请假原因 <input name="reason" required placeholder="如：发烧感冒" style="width: 100%; max-width: 300px;"></label>
+    <button type="submit" style="margin-top: 10px;">提交申请</button>
+  </form>
+</div>
+
+<table>
+  <thead>
+    <tr><th>时间段</th><th>原因</th><th>状态</th><th>申请时间</th></tr>
+  </thead>
+  <tbody>
+  {% for l in leaves %}
+    <tr>
+      <td>{{ l.start_date }} 至 {{ l.end_date }}</td>
+      <td>{{ l.reason }}</td>
+      <td>
+        {% if l.status == '待审批' %}
+          <span style="color: #f0ad4e; font-weight: bold;">{{ l.status }}</span>
+        {% elif l.status == '已同意' %}
+          <span style="color: #28a745; font-weight: bold;">{{ l.status }}</span>
+        {% else %}
+          <span style="color: #d9534f; font-weight: bold;">{{ l.status }}</span>
+        {% endif %}
+      </td>
+      <td>{{ l.created_at }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">您还没有提交过请假</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

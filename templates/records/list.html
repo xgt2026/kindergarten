@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-secondary"><i class="bi bi-calendar-check me-2"></i>考勤/接送记录</h3>
+  <a class="btn btn-primary" href="{{ url_for('records_add') }}"><i class="bi bi-plus-lg me-1"></i>新增记录</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body py-3">
+    <form method="get" class="row g-2 align-items-center">
+      <div class="col-auto">
+        <label class="col-form-label fw-bold">选择日期：</label>
+      </div>
+      <div class="col-auto">
+        <input type="date" name="date" class="form-control form-control-sm" value="{{ date_str }}">
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-secondary btn-sm">查询</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>ID</th><th>儿童</th><th>班级</th><th>类型</th><th>时间</th><th>接送人/操作人</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+      {% for r in records %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td><strong>{{ r.child_name }}</strong></td>
+          <td>{{ r.class_name or "-" }}</td>
+          <td>
+            {% if r.record_type == '入园' %}
+              <span class="badge bg-success">{{ r.record_type }}</span>
+            {% else %}
+              <span class="badge bg-danger">{{ r.record_type }}</span>
+            {% endif %}
+          </td>
+          <td>{{ r.record_time }}</td>
+          <td>{{ r.operator or "-" }}</td>
+          <td>
+            {% if current_user.role == 'admin' %}
+            <form method="post" action="{{ url_for('records_delete', record_id=r.id) }}" class="d-inline" onsubmit="return confirm('确定删除？')">
+              <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+            </form>
+            {% else %}
+            <span class="text-muted">-</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">这一天还没有考勤记录</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

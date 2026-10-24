@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h3 class="text-center fw-bold mb-4 text-success"><i class="bi bi-person-plus me-2"></i>注册新账号</h3>
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label text-muted">用户名</label>
+            <input name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-muted">密码</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-muted">真实姓名</label>
+            <input name="real_name" class="form-control">
+          </div>
+          <div class="mb-4">
+            <label class="form-label text-muted">角色</label>
+            <select name="role" class="form-select">
+              <option value="parent">家长</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success w-100 py-2">注 册</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

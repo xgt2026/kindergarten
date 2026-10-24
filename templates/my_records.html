@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>我的考勤记录</h2>
+
+<form method="get" class="inline" style="margin-bottom: 15px;">
+  <label>选择日期：</label>
+  <input type="date" name="date" value="{{ date_str or '' }}">
+  <button type="submit">查询</button>
+</form>
+
+<table>
+  <thead>
+    <tr><th>类型</th><th>时间</th><th>接送人/操作人</th></tr>
+  </thead>
+  <tbody>
+  {% for r in records %}
+    <tr>
+      <td>
+        {% if r.record_type == '入园' %}
+          <span style="color: #28a745;">{{ r.record_type }}</span>
+        {% else %}
+          <span style="color: #d9534f;">{{ r.record_type }}</span>
+        {% endif %}
+      </td>
+      <td>{{ r.record_time }}</td>
+      <td>{{ r.operator or "-" }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="3">没有查询到考勤记录</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

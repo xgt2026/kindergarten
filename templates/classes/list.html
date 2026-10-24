@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-secondary"><i class="bi bi-building me-2"></i>班级管理</h3>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header bg-white fw-bold">添加新班级</div>
+  <div class="card-body">
+    <form method="post" class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label text-muted small mb-1">班级名</label>
+        <input name="name" class="form-control" placeholder="如 小一班" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small mb-1">年级</label>
+        <input name="grade" class="form-control" placeholder="如 小班">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small mb-1">班主任</label>
+        <input name="teacher_name" class="form-control" placeholder="如 王老师">
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">添加</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>ID</th><th>班级名</th><th>年级</th><th>班主任</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+      {% for c in classes %}
+        <tr>
+          <td>{{ c.id }}</td>
+          <td><strong>{{ c.name }}</strong></td>
+          <td>{{ c.grade or "-" }}</td>
+          <td>{{ c.teacher_name or "-" }}</td>
+          <td>
+            <form method="post" action="{{ url_for('classes_delete', class_id=c.id) }}" class="d-inline" onsubmit="return confirm('确定删除该班级？')">
+              <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" class="text-center text-muted py-4">暂无班级</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
