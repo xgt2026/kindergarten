@@ -1,5 +1,6 @@
 from db import get_db
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 def list_records(date_str=None):
     conn = get_db()
@@ -18,7 +19,8 @@ def list_records(date_str=None):
 
 def add_record(child_id, record_type, operator):
     conn = get_db()
-    now_str = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
+    # 这里改成了动态获取上海时区
+    now_str = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M:%S")
     conn.execute(
         "INSERT INTO records (child_id, record_type, record_time, operator) VALUES (?, ?, ?, ?)",
         (child_id, record_type, now_str, operator)

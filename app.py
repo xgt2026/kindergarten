@@ -6,7 +6,8 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from openpyxl import Workbook, load_workbook
 from io import BytesIO
-from datetime import datetime, timedelta
+from datetime import datetime
+from zoneinfo import ZoneInfo  # 【新增】导入时区库
 
 from db import init_db, get_db
 from models import get_user_by_id, get_user_by_username
@@ -268,7 +269,8 @@ def users_delete(user_id):
 @login_required
 @role_required("admin", "teacher")
 def records_list():
-    date_str = request.args.get("date", (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d"))
+    # 默认查询今天（动态时区）
+    date_str = request.args.get("date", datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d"))
     records = record_service.list_records(date_str)
     return render_template("records/list.html", records=records, date_str=date_str)
 
@@ -329,7 +331,8 @@ def notices_list():
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
-        now_str = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+        # 动态时区
+        now_str = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M")
         conn = get_db()
         conn.execute("INSERT INTO notices (title, content, created_at, author) VALUES (?, ?, ?, ?)",
                      (title, content, now_str, current_user.username))
@@ -373,7 +376,8 @@ def photos_list():
         file.save(save_path)
         
         db_path = f"uploads/{filename}"
-        now_str = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+        # 动态时区
+        now_str = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M")
         
         conn = get_db()
         conn.execute("INSERT INTO photos (child_id, image_path, description, created_at, author) VALUES (?, ?, ?, ?, ?)",
@@ -421,7 +425,7 @@ def get_photos_by_child(child_id):
     conn.close()
     return rows
 
-# ---------- 【新增】请假管理 ----------
+# ---------- 请假管理 ----------
 @app.route("/leaves", methods=["GET", "POST"])
 @login_required
 @role_required("admin", "teacher")
@@ -457,7 +461,8 @@ def my_leaves():
         start_date = request.form["start_date"]
         end_date = request.form["end_date"]
         reason = request.form["reason"]
-        now_str = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+        # 动态时区
+        now_str = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M")
         
         conn = get_db()
         conn.execute("INSERT INTO leaves (child_id, start_date, end_date, reason, status, created_at) VALUES (?, ?, ?, ?, '待审批', ?)",
@@ -476,5 +481,6 @@ def my_leaves():
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
+
 if __name__ != "__main__":
     init_db()
