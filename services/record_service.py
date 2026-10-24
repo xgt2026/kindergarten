@@ -18,7 +18,7 @@ def list_records(date_str=None):
 
 def add_record(child_id, record_type, operator):
     conn = get_db()
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = (datetime.now() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
     conn.execute(
         "INSERT INTO records (child_id, record_type, record_time, operator) VALUES (?, ?, ?, ?)",
         (child_id, record_type, now_str, operator)
